@@ -2,6 +2,6 @@ package org.app.Models.Enums;
 
 public enum TypeComposant {
 
-    MAINDOEVRE,
+    MAINDOEUVER,
     MATERIEL;
 }

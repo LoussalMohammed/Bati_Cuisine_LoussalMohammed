@@ -1,16 +1,14 @@
 package org.views;
 
-import org.app.Models.Helpers.PasswordUtil;
+import java.awt.desktop.SystemEventListener;
+import java.util.Scanner;
 
 public class Main {
-
     public static void main(String[] args) {
-
-        String password = "loussalmohammed@2024.com";
-
-        String hashedPassword = PasswordUtil.hashPassword(password);
-
-        System.out.println(hashedPassword);
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Hello In JAR!!");
+        System.out.print("Enter Your Name:\t");
+        String name = scanner.nextLine();
+        System.out.println("Great Name " +name+ " Hope You Are Doing Fine!");
     }
-
 }

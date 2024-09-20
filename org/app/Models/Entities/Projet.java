@@ -14,6 +14,15 @@ public class Projet {
     private List<Composant> composants;
     private int clientId;
 
+    public Projet(String nomProjet, double margeBeneficiaire, double coutTotal, StatusProjet etatProjet, List<Composant> composants, int clientId) {
+        this.nomProjet = nomProjet;
+        this.margeBeneficiaire = margeBeneficiaire;
+        this.coutTotal = coutTotal;
+        this.etatProjet = etatProjet;
+        this.composants = composants;
+        this.clientId = clientId;
+    }
+
     public String getNomProjet() {
         return nomProjet;
     }

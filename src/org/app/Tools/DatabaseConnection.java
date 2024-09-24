@@ -8,10 +8,10 @@ public class DatabaseConnection {
 
     public static void main(String[] args) {
 
-        databaseC db = null;
+        DatabaseC db = null;
 
         try {
-            db = databaseC.getInstance();
+            db = DatabaseC.getInstance();
             Connection conn = db.getConnection();
 
             System.out.println("database connected....");

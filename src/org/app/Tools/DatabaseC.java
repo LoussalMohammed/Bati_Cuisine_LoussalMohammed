@@ -4,13 +4,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class databaseC extends DataFile{
+public class DatabaseC extends DataFile{
 
-    private static databaseC instance; // Changed to DatabaseC to match class name
+    private static DatabaseC instance; // Changed to DatabaseC to match class name
     private Connection connection;
 
     // Private constructor to prevent instantiation
-    private databaseC() throws SQLException {
+    private DatabaseC() throws SQLException {
         connect();
     }
 
@@ -37,9 +37,9 @@ public class databaseC extends DataFile{
     }
 
     // Singleton method to get the instance of DatabaseC
-    public static databaseC getInstance() throws SQLException {
+    public static DatabaseC getInstance() throws SQLException {
         if (instance == null) {
-            instance = new databaseC(); // Changed to DatabaseC
+            instance = new DatabaseC(); // Changed to DatabaseC
         } else if (instance.getConnection().isClosed()) {
             instance.connect(); // Reuse the existing instance and reconnect
         }

@@ -1,6 +1,6 @@
 package org.database.migration;
 
-import org.app.Tools.databaseC;
+import org.app.Tools.DatabaseC;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,7 +14,7 @@ public abstract class Migration {
      * @param successMessage The message to print upon successful execution.
      */
     protected void executeUpdate(String sql, String successMessage) {
-        try (Connection conn = databaseC.getInstance().getConnection();
+        try (Connection conn = DatabaseC.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.executeUpdate();
             System.out.println(successMessage);

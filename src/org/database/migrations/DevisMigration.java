@@ -11,10 +11,9 @@ public class DevisMigration extends Migration {
         String sql = "CREATE TABLE IF NOT EXISTS "+ TABLE +" (" +
                 "id SERIAL PRIMARY KEY," +
                 "montantEstime DECIMAL(10, 2) DEFAULT NULL," +
-                "dateEstime TIMESTAMP DEFAULT NULL," +
-                "cout_transport DECIMAL(10, 2) NOT NULL," +
-                "coefficient_qualite DECIMAL(10, 2) NOT NULL," +
-                "composant_id INT REFERENCES composants(id) ON DELETE CASCADE,"+
+                "dateEstime TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
+                "dateValidite TIMESTAMP DEFAULT NULL," +
+                "projet_id INT REFERENCES projets(id) ON DELETE CASCADE,"+
                 "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL ,"+
                 "deleted_at TIMESTAMP DEFAULT NULL"+
                 ");";

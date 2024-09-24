@@ -10,6 +10,7 @@ public class ProjetsMigration extends Migration {
     public void create() {
         String sql = "CREATE TABLE IF NOT EXISTS "+TABLE+" (" +
                 "id SERIAL PRIMARY KEY," +
+                "nom VARCHAR(255) NOT NULL,"+
                 "margeBeneficiaire VARCHAR(255) NOT NULL," +
                 "coutTotal DECIMAL(10, 2) NOT NULL," + // Use the enum type here
                 "etatProjet status_projet NOT NULL DEFAULT 'ENCOURS'::status_projet," +

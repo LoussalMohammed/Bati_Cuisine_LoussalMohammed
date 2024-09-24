@@ -14,7 +14,7 @@ import org.app.Models.Entities.Composant;
 public class ComposantsSeeder {
 
     public Composant findById(int id) throws SQLException {
-        try (Connection connection = databaseC.getInstance().getConnection()) {
+        try (Connection connection = DatabaseC.getInstance().getConnection()) {
             String sql = "SELECT * FROM composants WHERE id = ? AND deleted_at IS NULL";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, id);
@@ -40,7 +40,7 @@ public class ComposantsSeeder {
 
     public ArrayList<Admin> getAllAdmin() throws SQLException {
         ArrayList<Admin> admins = new ArrayList<>();
-        try (Connection connection = databaseC.getInstance().getConnection()) {
+        try (Connection connection = DatabaseC.getInstance().getConnection()) {
             String sql = "SELECT * FROM administrators WHERE deleted_at IS NULL";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -63,7 +63,7 @@ public class ComposantsSeeder {
 
     public void save(Admin admin) throws SQLException {
         String sql = "INSERT INTO administrators (id, firstName, lastName, email, phone, role, hashedPassword, created_at) VALUES (?, ?, ?, ?, ?, CAST(? AS role), ?, ?)";
-        try (Connection connection = databaseC.getInstance().getConnection();
+        try (Connection connection = DatabaseC.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setInt(1, admin.getId());
@@ -81,7 +81,7 @@ public class ComposantsSeeder {
 
     public void update(Admin admin) throws SQLException {
         String sql = "UPDATE administrators SET firstName = ?, lastName = ?, email = ?, phone = ?, role = ?, created_at = ? WHERE id = ?";
-        try (Connection connection = databaseC.getInstance().getConnection();
+        try (Connection connection = DatabaseC.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, admin.getFirstName());
@@ -97,7 +97,7 @@ public class ComposantsSeeder {
     }
     public void delete(int id) throws SQLException {
         String sql = "UPDATE administrators SET deleted_at = ? WHERE id = ?";
-        try (Connection connection = databaseC.getInstance().getConnection();
+        try (Connection connection = DatabaseC.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setDate(1, Date.valueOf(LocalDateTime.now().toLocalDate()));
@@ -109,7 +109,7 @@ public class ComposantsSeeder {
 
     public void restore(int id) throws SQLException {
         String sql = "UPDATE administrators SET deleted_at = ? WHERE id = ?";
-        try (Connection connection = databaseC.getInstance().getConnection();
+        try (Connection connection = DatabaseC.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setDate(1, null);

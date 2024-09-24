@@ -1,4 +1,4 @@
-# ***BatiConstructionsX***
+# ***Bati*** ***Cuisine***
 ## Overview
 BatiConstructionsX is a Java Console application tailored for construction professionals specializing in kitchen construction and renovation. This powerful tool streamlines the process of estimating kitchen project costs by accurately calculating expenses related to materials and labor. Designed with user-friendliness in mind, it enables effective project management and enhances decision-making for construction teams.
 

@@ -1,16 +1,16 @@
 package org.app.Models.Repositories.RepositoriesImplementation;
 
 import org.app.Models.Entities.Client;
-import org.app.Tools.databaseC;
+import org.app.Tools.DatabaseC;
 
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class clientRepositoryImpl {
+public class ClientRepositoryImpl {
     public Client findById(int id) {
         String sql = "SELECT * FROM clients WHERE id = ? LIMIT 1 OFFSET 1";
-        try (Connection connection = databaseC.getInstance().getConnection();
+        try (Connection connection = DatabaseC.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             try(ResultSet resultSet = statement.executeQuery()) {
@@ -37,9 +37,33 @@ public class clientRepositoryImpl {
         return null;
     }
 
+    public Client getClientByName(String name) {
+        String sql = "SELECT * FROM clients ORDER BY levenshtein(lower(nom), lower(?)) LIMIT 1";
+        try (Connection connection = DatabaseC.getInstance().getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, name);  // Use setString to bind the name parameter
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return new Client(
+                            resultSet.getInt("id"),
+                            resultSet.getString("nom"),
+                            resultSet.getString("address"),
+                            resultSet.getString("phone"),
+                            resultSet.getBoolean("estProfessionnel"),
+                            resultSet.getDouble("remise")
+                    );
+                } else {
+                    return null;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
     public ArrayList<Client> getAll() throws SQLException {
         ArrayList<Client> Clients = new ArrayList<>(10);
-        try (Connection connection = databaseC.getInstance().getConnection()) {
+        try (Connection connection = DatabaseC.getInstance().getConnection()) {
             String sql = "SELECT * FROM clients WHERE deleted_at IS NULL";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -64,7 +88,7 @@ public class clientRepositoryImpl {
         String sql = "INSERT INTO clients (id, nom, address, phone, estprofessionnel, remise) VALUES (?, ?, ?, ?, ?, ?)";
         boolean result = false;
 
-        try (Connection connection = databaseC.getInstance().getConnection();
+        try (Connection connection = DatabaseC.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setInt(1, client.getId());
@@ -89,7 +113,7 @@ public class clientRepositoryImpl {
         String sql = "INSERT INTO clients (id, nom, address, phone, estprofessionnel, remise) VALUES (?, ?, ?, ?, ?, ?)";
         boolean result = false;
 
-        try (Connection connection = databaseC.getInstance().getConnection();
+        try (Connection connection = DatabaseC.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setInt(1, client.getId());
@@ -114,7 +138,7 @@ public class clientRepositoryImpl {
         String sql = "UPDATE clients SET deleted_at = ? WHERE id = ?";
         boolean result = false;
 
-        try (Connection connection = databaseC.getInstance().getConnection();
+        try (Connection connection = DatabaseC.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setDate(1, Date.valueOf(LocalDateTime.now().toLocalDate()));
@@ -131,7 +155,7 @@ public class clientRepositoryImpl {
     public boolean restore(int id) throws SQLException {
         String sql = "UPDATE ONLY clients SET deleted_at = ? WHERE id = ?";
         boolean result = false;
-        try (Connection connection = databaseC.getInstance().getConnection();
+        try (Connection connection = DatabaseC.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setDate(1, null);
@@ -147,7 +171,7 @@ public class clientRepositoryImpl {
 
     public Integer getLastId() {
         String sql = "SELECT MAX(id) AS id FROM clients";
-        try (Connection connection = databaseC.getInstance().getConnection();
+        try (Connection connection = DatabaseC.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             ResultSet resultSet = statement.executeQuery();
             try {

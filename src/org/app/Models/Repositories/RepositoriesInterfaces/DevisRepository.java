@@ -1,19 +1,21 @@
 package org.app.Models.Repositories.RepositoriesInterfaces;
 
 import org.app.Models.Entities.Devis;
-import org.app.Models.Entities.Projet;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
-public interface devisRepository {
-    public Devis findById(int id);
-    public ArrayList<Devis> getAll();
+public interface DevisRepository {
+    public Optional<Devis> findById(int id) throws SQLException;
+    public Optional<List<Devis>> getAll() throws SQLException;
 
-    public boolean save(Devis devis);
-    public boolean update(Devis devis);
+    public boolean save(Devis devis) throws SQLException;
+    public boolean update(Devis devis) throws SQLException;
 
-    public boolean delete(int id);
-    public boolean restore(int id);
+    public boolean delete(int id) throws SQLException;
+    public boolean restore(int id) throws SQLException;
 
-    public int findLastId();
+    public Integer findLastId();
 }

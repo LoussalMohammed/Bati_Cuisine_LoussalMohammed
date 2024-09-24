@@ -1,19 +1,21 @@
 package org.app.Models.Repositories.RepositoriesInterfaces;
 
 import org.app.Models.Entities.Material;
-import org.app.Models.Entities.Projet;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
-public interface materialRepository {
-    public Material findById(int id);
-    public ArrayList<Material> getAll();
+public interface MaterialRepository {
+    public Optional<Material> findById(int id) throws SQLException;
+    public Optional<List<Material>> getAll() throws SQLException;
 
-    public boolean save(Material material);
-    public boolean update(Material material);
+    public boolean save(Material material) throws SQLException;
+    public boolean update(Material material) throws SQLException;
 
-    public boolean delete(int id);
-    public boolean restore(int id);
+    public boolean delete(int id) throws SQLException;
+    public boolean restore(int id) throws SQLException;
 
-    public int findLastId();
+    public Integer findLastId();
 }

@@ -1,20 +1,21 @@
 package org.app.Models.Repositories.RepositoriesInterfaces;
 
 import org.app.Models.Entities.Main_Doeuver;
-import org.app.Models.Entities.Projet;
 
-import java.lang.reflect.Array;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
-public interface main_doeuverRepository {
-    public Main_Doeuver findById(int id);
-    public ArrayList<Main_Doeuver> getAll();
+public interface Main_doeuverRepository {
+    public Optional<Main_Doeuver> findById(int id) throws SQLException;
+    public Optional<List<Main_Doeuver>> getAll() throws SQLException;
 
-    public boolean save(Main_Doeuver main_doeuver);
-    public boolean update(Main_Doeuver main_doeuver);
+    public boolean save(Main_Doeuver main_doeuver) throws SQLException;
+    public boolean update(Main_Doeuver main_doeuver) throws SQLException;
 
-    public boolean delete(int id);
-    public boolean restore(int id);
+    public boolean delete(int id) throws SQLException;
+    public boolean restore(int id) throws SQLException;
 
-    public int findLastId();
+    public Integer findLastId();
 }

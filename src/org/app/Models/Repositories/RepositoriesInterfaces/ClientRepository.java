@@ -1,19 +1,22 @@
 package org.app.Models.Repositories.RepositoriesInterfaces;
 
 import org.app.Models.Entities.Client;
-import org.app.Models.Entities.Composant;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
-public interface clientRepository {
-    public Client findById(int id);
-    public ArrayList<Client> getAll();
+public interface ClientRepository {
+    public Optional<Client> findById(int id) throws SQLException;
+    public Client getClientByName(String name) throws SQLException;
+    public Optional<List<Client>> getAll() throws SQLException;
 
-    public boolean save(Client client);
-    public boolean update(Client client);
+    public boolean save(Client client) throws SQLException;
+    public boolean update(Client client) throws SQLException;
 
-    public boolean delete(int id);
-    public boolean restore(int id);
+    public boolean delete(int id) throws SQLException;
+    public boolean restore(int id) throws SQLException;
 
-    public int findLastId();
+    public Integer findLastId();
 }

@@ -1,19 +1,21 @@
 package org.app.Models.Repositories.RepositoriesInterfaces;
 
 import org.app.Models.Entities.Composant;
-import org.app.Models.Entities.Projet;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
-public interface composantRepository {
-    public Composant findById(int id);
-    public ArrayList<Composant> getAll();
+public interface ComposantRepository {
+    public Optional<Composant> findById(int id) throws SQLException;
+    public Optional<List<Composant>> getAll() throws SQLException;
 
-    public boolean save(Composant composant);
-    public boolean update(Composant composant);
+    public boolean save(Composant composant) throws SQLException;
+    public boolean update(Composant composant) throws SQLException;
 
-    public boolean delete(int id);
-    public boolean restore(int id);
+    public boolean delete(int id) throws SQLException;
+    public boolean restore(int id) throws SQLException;
 
-    public int findLastId();
+    public Integer findLastId();
 }

@@ -2,6 +2,8 @@ package org.app.Models.Entities;
 
 import org.app.Models.Enums.TypeComposant;
 
+import java.util.List;
+
 public abstract class Composant {
 
     protected int id;
@@ -13,16 +15,14 @@ public abstract class Composant {
 
     protected double tauxTVA;
 
-    protected int projectId;
 
-    public Composant(int id,String nom, TypeComposant typeComposant, double quantite, double coutUnitaire, double tauxTVA, int projectId) {
+    public Composant(int id,String nom, TypeComposant typeComposant, double quantite, double coutUnitaire, double tauxTVA) {
         this.id = id;
         this.nom = nom;
         this.typeComposant = typeComposant;
         this.quantite = quantite;
         this.coutUnitaire = coutUnitaire;
         this.tauxTVA = tauxTVA;
-        this.projectId = projectId;
     }
 
     public int getId() {
@@ -71,14 +71,6 @@ public abstract class Composant {
 
     public void getTauxTVA(double tauxTVA) {
         this.tauxTVA = tauxTVA;
-    }
-
-    public int setProjectId() {
-        return projectId;
-    }
-
-    public void setProjectId(int projectId) {
-        this.projectId = projectId;
     }
 
     public abstract double calculeCout();

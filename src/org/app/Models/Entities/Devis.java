@@ -2,19 +2,33 @@ package org.app.Models.Entities;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class Devis {
 
+
+    private int id;
     private double monantEstime;
     private LocalDateTime dateEstime;
     private LocalDateTime dateValidite;
     private boolean accept;
+    protected Projet projet;
 
-    public Devis(double monantEstime, LocalDateTime dateEstime,LocalDateTime dateValidite, boolean accept) {
+    public Devis(int id, double monantEstime, LocalDateTime dateEstime,LocalDateTime dateValidite, boolean accept, Projet projet) {
+        this.id = id;
         this.monantEstime = monantEstime;
         this.dateEstime = dateEstime;
         this.dateValidite = dateValidite;
         this.accept = accept;
+        this.projet = projet;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public double getMonantEstime() {
@@ -47,6 +61,14 @@ public class Devis {
 
     public void setAcceptStatus(boolean acceptStatus) {
         accept = acceptStatus;
+    }
+
+    public Projet getProjet() {
+        return projet;
+    }
+
+    public void setProjet(Projet projet) {
+        this.projet = projet;
     }
 
 

@@ -13,16 +13,17 @@ public class Projet {
     private StatusProjet etatProjet;
 
     private List<Composant> composants;
-    private int clientId;
+    private Client client;
 
-    public Projet(int id, String nomProjet, double margeBeneficiaire, double coutTotal, StatusProjet etatProjet, List<Composant> composants, int clientId) {
+
+    public Projet(int id, String nomProjet, double margeBeneficiaire, double coutTotal, StatusProjet etatProjet, List<Composant> composants, Client client) {
         this.id = id;
         this.nomProjet = nomProjet;
         this.margeBeneficiaire = margeBeneficiaire;
         this.coutTotal = coutTotal;
         this.etatProjet = etatProjet;
         this.composants = composants;
-        this.clientId = clientId;
+        this.client = client;
     }
 
     public int getId() {
@@ -77,12 +78,14 @@ public class Projet {
         composants.add(composant);
     }
 
-    public int getClientId() {
-        return clientId;
+    public Client getClient() {
+        return client;
     }
 
-    public void setClientId(int clientId) {
-        this.clientId = clientId;
+    public void setClient(Client client) {
+        this.client = client;
     }
+
+
 
 }

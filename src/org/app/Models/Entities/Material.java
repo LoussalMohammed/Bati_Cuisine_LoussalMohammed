@@ -1,19 +1,24 @@
 package org.app.Models.Entities;
 
-public class Material {
+import org.app.Models.Enums.TypeComposant;
+
+import java.util.List;
+
+public class Material extends Composant{
 
 
     private double coutTransport;
 
     private double coefficientQualte;
 
-    public Material(double coutTransport, double coefficientQualte) {
+    public Material(int id, String nom, TypeComposant typeComposant, double quantite, double coutUnitaire, double tauxTVA, double coutTransport, double coefficientQualte) {
+        super(id,nom, typeComposant, quantite, coutUnitaire, tauxTVA);
         this.coutTransport = coutTransport;
         this.coefficientQualte = coefficientQualte;
     }
 
 
-    public double setCoutTransport() {
+    public double getCoutTransport() {
         return coutTransport;
     }
 
@@ -29,4 +34,8 @@ public class Material {
         this.coefficientQualte = coefficientQualte;
     }
 
+    @Override
+    public double calculeCout() {
+        return 0;
+    }
 }

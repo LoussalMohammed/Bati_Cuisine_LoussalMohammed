@@ -1,35 +1,28 @@
 package org.app.Models.Entities;
 
-public class Main_Doeuver {
+import org.app.Models.Enums.TypeComposant;
+
+import java.util.List;
+
+public class Main_Doeuver extends Composant{
 
     private double productiviteOuvrier;
 
-    public Main_Doeuver(double tauxHoraire, double heuresTravail, double productiviteOuvrier) {
-
+    public Main_Doeuver(int id, String nom, TypeComposant typeComposant, double quantite, double coutUnitaire, double tauxTVA, double productiviteOuvrier) {
+        super(id,nom, typeComposant, quantite, coutUnitaire, tauxTVA);
         this.productiviteOuvrier = productiviteOuvrier;
     }
 
-    public double getTauxHoraire() {
-        return this.tauxHoraire;
-    }
-
-    public void setTauxHoraire(double tauxHoraire) {
-        this.tauxHoraire = tauxHoraire;
-    }
-
-    public double setHeuresTravail() {
-        return this.heuresTravail;
-    }
-
-    public void setHeuresTravail(double heuresTravail) {
-        this.heuresTravail = heuresTravail;
-    }
-
-    public double setProductiviteOuvrier() {
+    public double getProductiviteOuvrier() {
         return this.productiviteOuvrier;
     }
 
     public void setProductiviteOuvrier(double productiviteOuvrier) {
         this.productiviteOuvrier = productiviteOuvrier;
+    }
+
+    @Override
+    public double calculeCout() {
+        return 0;
     }
 }

@@ -1,3 +1,4 @@
+
 ### IntelliJ IDEA ###
 out/
 !**/src/main/**/out/
@@ -26,3 +27,6 @@ out/
 
 ### Mac OS ###
 .DS_Store
+=======
+/.idea/
+/test/

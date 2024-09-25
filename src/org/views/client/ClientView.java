@@ -1,6 +1,6 @@
 package org.views.client;
 
-public class ClientDisplay {
+public class ClientView {
 
 }
 

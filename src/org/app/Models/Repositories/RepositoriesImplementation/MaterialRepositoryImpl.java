@@ -84,10 +84,10 @@ public class MaterialRepositoryImpl implements MaterialRepository {
             statement.setDouble(5, material.getQuantite());
             statement.setDouble(6, material.getCoutUnitaire());
             statement.setDouble(7, material.getCoutTransport());
-            statement.setDouble(8, material.getCoefficientQualte());
+            statement.setDouble(8, material.getCoefficientQualite());
 
             System.out.println("SQL: " + sql);
-            System.out.println("Parameters: " + material.getId() + ", " + material.getNom() + ", " + material.getTypeComposant() + ", " + material.getTauxTVA() + ", " + material.getQuantite() + ", " + material.getCoutUnitaire() + ", " + material.getCoutTransport() + ", " + material.getCoefficientQualte());
+            System.out.println("Parameters: " + material.getId() + ", " + material.getNom() + ", " + material.getTypeComposant() + ", " + material.getTauxTVA() + ", " + material.getQuantite() + ", " + material.getCoutUnitaire() + ", " + material.getCoutTransport() + ", " + material.getCoefficientQualite());
 
             statement.executeUpdate();
             result = true;
@@ -114,7 +114,7 @@ public class MaterialRepositoryImpl implements MaterialRepository {
             statement.setDouble(4, material.getQuantite());
             statement.setDouble(5, material.getCoutUnitaire());
             statement.setDouble(6, material.getCoutTransport());
-            statement.setDouble(7, material.getCoefficientQualte());
+            statement.setDouble(7, material.getCoefficientQualite());
 
             statement.setInt(8, material.getId());
             statement.executeUpdate();

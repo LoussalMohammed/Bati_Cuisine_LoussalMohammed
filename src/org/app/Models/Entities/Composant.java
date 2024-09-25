@@ -69,9 +69,14 @@ public abstract class Composant {
         return tauxTVA;
     }
 
-    public void getTauxTVA(double tauxTVA) {
+    public void setTauxTVA(double tauxTVA) {
         this.tauxTVA = tauxTVA;
     }
 
-    public abstract double calculeCout();
+    public double calculeCout() {
+        return (coutUnitaire + (coutUnitaire * tauxTVA / 100)) * quantite;
+    }
+    public double calculCoutWithoutTva() {
+        return coutUnitaire * quantite;
+    }
 }

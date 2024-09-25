@@ -9,6 +9,7 @@ import java.util.Optional;
 
 public interface ProjectRespository {
 
+
     public Optional<Projet> findById(int id) throws SQLException;
     public Optional<List<Projet>> getAll() throws SQLException;
 

@@ -210,7 +210,7 @@ public class DevisRepositoryImpl implements DevisRepository {
     @Override
     public boolean save(Devis devis) throws SQLException {
 
-        String sql = "INSERT INTO devis (id, montantestime, dateestime, datevalidite, projet_id) VALUES (?, ?, ?, ?, ?,)";
+        String sql = "INSERT INTO devis (id, montantestime, dateestime, datevalidite, projet_id) VALUES (?, ?, ?, ?, ?)";
         boolean result = false;
 
         try (Connection connection = DatabaseC.getInstance().getConnection();
@@ -220,7 +220,7 @@ public class DevisRepositoryImpl implements DevisRepository {
             statement.setDouble(2, devis.getMonantEstime());
             statement.setTimestamp(3, Timestamp.valueOf(devis.getDateEstime()));
             statement.setTimestamp(4, Timestamp.valueOf(devis.getDateValidite()));
-            statement.setObject(5, devis.getProjet());
+            statement.setInt(5, devis.getProjet().getId());
 
             System.out.println("SQL: " + sql);
             System.out.println("Parameters: " + devis.getId() + ", " + devis.getMonantEstime() + ", " + devis.getDateEstime() + ", " + devis.getDateValidite());
@@ -255,6 +255,7 @@ public class DevisRepositoryImpl implements DevisRepository {
 
 
         }
+        return result;
     }
 
     @Override

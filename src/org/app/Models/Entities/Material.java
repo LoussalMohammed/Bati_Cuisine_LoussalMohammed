@@ -9,12 +9,12 @@ public class Material extends Composant{
 
     private double coutTransport;
 
-    private double coefficientQualte;
+    private double coefficientQualite;
 
-    public Material(int id, String nom, TypeComposant typeComposant, double quantite, double coutUnitaire, double tauxTVA, double coutTransport, double coefficientQualte) {
+    public Material(int id, String nom, TypeComposant typeComposant, double quantite, double coutUnitaire, double tauxTVA, double coutTransport, double coefficientQualite) {
         super(id,nom, typeComposant, quantite, coutUnitaire, tauxTVA);
         this.coutTransport = coutTransport;
-        this.coefficientQualte = coefficientQualte;
+        this.coefficientQualite = coefficientQualite;
     }
 
 
@@ -26,16 +26,27 @@ public class Material extends Composant{
         this.coutTransport = coutTransport;
     }
 
-    public double getCoefficientQualte() {
-        return coefficientQualte;
+    public double getCoefficientQualite() {
+        return coefficientQualite;
     }
 
-    public void setCoefficientQualte(double coefficientQualte) {
-        this.coefficientQualte = coefficientQualte;
+    public void setCoefficientQualite(double coefficientQualte) {
+        this.coefficientQualite = coefficientQualte;
     }
 
     @Override
     public double calculeCout() {
-        return 0;
+        double percentageToAdd = (coefficientQualite - 1.0) * 100;
+        double coutUnitaire = this.coutUnitaire + (this.coutUnitaire * (percentageToAdd/100));
+        setCoutUnitaire(coutUnitaire);
+            return ((coutUnitaire + (coutUnitaire * tauxTVA / 100)) * quantite) + coutTransport;
+    }
+
+    @Override
+    public double calculCoutWithoutTva() {
+        double percentageToAdd = (coefficientQualite - 1.0) * 100;
+        double coutUnitaire = this.coutUnitaire + (this.coutUnitaire * (percentageToAdd/100));
+        setCoutUnitaire(coutUnitaire);
+            return (coutUnitaire * quantite) + coutTransport;
     }
 }

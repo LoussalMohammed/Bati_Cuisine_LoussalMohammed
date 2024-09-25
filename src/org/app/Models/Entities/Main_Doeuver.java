@@ -23,6 +23,19 @@ public class Main_Doeuver extends Composant{
 
     @Override
     public double calculeCout() {
-        return 0;
+
+        double percentageToAdd = (productiviteOuvrier - 1.0) * 100;
+        double coutUnitaire = this.coutUnitaire + (this.coutUnitaire * (percentageToAdd/100));
+        setCoutUnitaire(coutUnitaire);
+        return (coutUnitaire + (coutUnitaire * tauxTVA / 100)) * quantite;
+    }
+
+    @Override
+    public double calculCoutWithoutTva(){
+
+        double percentageToAdd = (productiviteOuvrier - 1.0) * 100;
+        double coutUnitaire = this.coutUnitaire + (this.coutUnitaire * (percentageToAdd/100));
+        setCoutUnitaire(coutUnitaire);
+        return coutUnitaire * quantite;
     }
 }

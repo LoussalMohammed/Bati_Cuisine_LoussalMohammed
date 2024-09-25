@@ -3,13 +3,16 @@ package org.app.Models.Repositories.RepositoriesImplementation;
 import org.app.Models.Entities.Client;
 import org.app.Tools.DatabaseC;
 
+import javax.swing.text.html.Option;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class ClientRepositoryImpl {
     public Client findById(int id) {
-        String sql = "SELECT * FROM clients WHERE id = ? LIMIT 1 OFFSET 1";
+        String sql = "SELECT * FROM clients WHERE id = ? LIMIT 1 ";
         try (Connection connection = DatabaseC.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
@@ -37,14 +40,17 @@ public class ClientRepositoryImpl {
         return null;
     }
 
-    public Client getClientByName(String name) {
+    public Optional<Client> getClientByName(String name) {
         String sql = "SELECT * FROM clients ORDER BY levenshtein(lower(nom), lower(?)) LIMIT 1";
+
         try (Connection connection = DatabaseC.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, name);  // Use setString to bind the name parameter
+
+            statement.setString(1, name);
+
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    return new Client(
+                    Client client = new Client(
                             resultSet.getInt("id"),
                             resultSet.getString("nom"),
                             resultSet.getString("address"),
@@ -52,15 +58,17 @@ public class ClientRepositoryImpl {
                             resultSet.getBoolean("estProfessionnel"),
                             resultSet.getDouble("remise")
                     );
-                } else {
-                    return null;
+                    return Optional.of(client);
                 }
+
+
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println("SQL Error: " + e.getMessage());
         }
-        return null;
+        return Optional.empty();
     }
+
     public ArrayList<Client> getAll() throws SQLException {
         ArrayList<Client> Clients = new ArrayList<>(10);
         try (Connection connection = DatabaseC.getInstance().getConnection()) {

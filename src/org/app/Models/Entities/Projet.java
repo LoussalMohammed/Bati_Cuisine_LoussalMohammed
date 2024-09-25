@@ -1,7 +1,11 @@
 package org.app.Models.Entities;
 
 import org.app.Models.Enums.StatusProjet;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Projet {
 
@@ -85,6 +89,24 @@ public class Projet {
     public void setClient(Client client) {
         this.client = client;
     }
+
+    public double coutTotal(double coutTVA, double margeBeneficiaire) {
+
+        double coutTotal;
+
+        List<Composant> composants = getComposants();
+        coutTotal = composants.stream()
+                .mapToDouble(composant -> {
+                    composant.setTauxTVA(coutTVA);
+                    return coutTVA > 0 ? composant.calculeCout() : composant.calculCoutWithoutTva();
+                })
+                .sum();
+
+        coutTotal += coutTotal * margeBeneficiaire;
+
+        return coutTotal;
+    }
+
 
 
 

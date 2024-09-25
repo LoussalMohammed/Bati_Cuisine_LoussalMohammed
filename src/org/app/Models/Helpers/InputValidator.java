@@ -29,4 +29,11 @@ public class InputValidator {
         Matcher matcher = compiledPattern.matcher(input);
         return matcher.find();
     }
+
+    public static boolean validateYN(String input) {
+        String pattern = "^[yYnN]";
+        Pattern compiledPattern = Pattern.compile(pattern);
+        Matcher matcher = compiledPattern.matcher(input);
+        return matcher.matches();
+    }
 }

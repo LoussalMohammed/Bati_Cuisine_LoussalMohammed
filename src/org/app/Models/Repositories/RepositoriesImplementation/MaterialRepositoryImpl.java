@@ -31,7 +31,8 @@ public class MaterialRepositoryImpl implements MaterialRepository {
                             resultSet.getDouble("coutUnitaire"),
                             resultSet.getDouble("tauxTVA"),
                             resultSet.getDouble("cout_transport"),
-                            resultSet.getDouble("coefficient_qualite")
+                            resultSet.getDouble("coefficient_qualite"),
+                            resultSet.getInt("projet_id")
                     );
 
                     return Optional.ofNullable(material);
@@ -58,7 +59,8 @@ public class MaterialRepositoryImpl implements MaterialRepository {
                             resultSet.getDouble("coutUnitaire"),
                             resultSet.getDouble("tauxTVA"),
                             resultSet.getDouble("cout_transport"),
-                            resultSet.getDouble("coefficient_qualite")
+                            resultSet.getDouble("coefficient_qualite"),
+                            resultSet.getInt("projet_id")
                     );
 
                     Materials.add(material);

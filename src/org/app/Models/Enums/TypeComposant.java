@@ -3,7 +3,7 @@ package org.app.Models.Enums;
 public enum TypeComposant {
 
     MAINDOEUVER("MAINDOEUVER"),
-    MATERIEL("MATERIAL");
+    MATERIAL("MATERIAL");
 
     private String typeComposant;
 

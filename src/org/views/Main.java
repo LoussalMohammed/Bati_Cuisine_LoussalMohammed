@@ -21,6 +21,7 @@ public class Main {
             switch (option) {
                 case 1 -> projetService.createProjet();
                 case 2 -> projetService.afficherProjets();
+                case 3 -> projetService.calculProjetCout();
                 case 0 -> {
                     continueSelecter = false;
                     System.out.println("Exiter la process de selection.");

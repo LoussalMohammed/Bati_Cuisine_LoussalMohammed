@@ -15,14 +15,17 @@ public abstract class Composant {
 
     protected double tauxTVA;
 
+    protected Integer projetId;
 
-    public Composant(int id,String nom, TypeComposant typeComposant, double quantite, double coutUnitaire, double tauxTVA) {
+
+    public Composant(int id,String nom, TypeComposant typeComposant, double quantite, double coutUnitaire, double tauxTVA, Integer projetId) {
         this.id = id;
         this.nom = nom;
         this.typeComposant = typeComposant;
         this.quantite = quantite;
         this.coutUnitaire = coutUnitaire;
         this.tauxTVA = tauxTVA;
+        this.projetId = projetId;
     }
 
     public int getId() {
@@ -73,10 +76,20 @@ public abstract class Composant {
         this.tauxTVA = tauxTVA;
     }
 
+    public Integer setProjetId() {
+        return projetId;
+    }
+
+    public void setProjetId(Integer projetId) {
+        this.projetId = projetId;
+    }
+
     public double calculeCout() {
         return (coutUnitaire + (coutUnitaire * tauxTVA / 100)) * quantite;
     }
     public double calculCoutWithoutTva() {
         return coutUnitaire * quantite;
     }
+
+
 }

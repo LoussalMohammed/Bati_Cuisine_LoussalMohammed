@@ -61,7 +61,7 @@ public class DevisRepositoryImpl implements DevisRepository {
                 // Do this in a loop to fetch all composants
                 do {
                     // Retrieve and add composants to the list
-                    TypeComposant typeComposant = TypeComposant.valueOf(resultSet.getString("type_composant"));
+                    TypeComposant typeComposant = TypeComposant.fromString(resultSet.getString("type_composant"));
                     if (TypeComposant.MAINDOEUVER.equals(typeComposant)) {
                         Main_Doeuver mainDoeuver = new Main_Doeuver(
                                 resultSet.getInt("composantId"),
@@ -70,10 +70,11 @@ public class DevisRepositoryImpl implements DevisRepository {
                                 resultSet.getDouble("quantite"),
                                 resultSet.getDouble("coutUnitaire"),
                                 resultSet.getDouble("tauxTVA"),
-                                resultSet.getDouble("productivite_ouvrier")
+                                resultSet.getDouble("productivite_ouvrier"),
+                                resultSet.getInt("projet_id")
                         );
                         composants.add(mainDoeuver);
-                    } else if (TypeComposant.MATERIEL.equals(typeComposant)) {
+                    } else if (TypeComposant.MATERIAL.equals(typeComposant)) {
                         Material material = new Material(
                                 resultSet.getInt("composantId"),
                                 resultSet.getString("composantNom"),
@@ -82,7 +83,8 @@ public class DevisRepositoryImpl implements DevisRepository {
                                 resultSet.getDouble("coutUnitaire"),
                                 resultSet.getDouble("tauxTVA"),
                                 resultSet.getDouble("coutTransport"),
-                                resultSet.getDouble("coefficientQualte")
+                                resultSet.getDouble("coefficientQualte"),
+                                resultSet.getInt("projet_id")
                         );
                         composants.add(material);
                     }
@@ -102,6 +104,8 @@ public class DevisRepositoryImpl implements DevisRepository {
             return Optional.ofNullable(devis);
         }
     }
+
+
 
 
     @Override
@@ -169,7 +173,7 @@ public class DevisRepositoryImpl implements DevisRepository {
                 }
 
                 // Now process the Composant
-                TypeComposant typeComposant = TypeComposant.valueOf(resultSet.getString("type_composant"));
+                TypeComposant typeComposant = TypeComposant.fromString(resultSet.getString("type_composant"));
                 Composant newComposant;
 
                 if (TypeComposant.MAINDOEUVER.equals(typeComposant)) {
@@ -180,9 +184,10 @@ public class DevisRepositoryImpl implements DevisRepository {
                             resultSet.getDouble("quantite"),
                             resultSet.getDouble("coutUnitaire"),
                             resultSet.getDouble("tauxTVA"),
-                            resultSet.getDouble("productivite_ouvrier")
+                            resultSet.getDouble("productivite_ouvrier"),
+                            resultSet.getInt("projet_id")
                     );
-                } else if (TypeComposant.MATERIEL.equals(typeComposant)) {
+                } else if (TypeComposant.MATERIAL.equals(typeComposant)) {
                     newComposant = new Material(
                             resultSet.getInt("composantId"),
                             resultSet.getString("composantNom"),
@@ -191,7 +196,8 @@ public class DevisRepositoryImpl implements DevisRepository {
                             resultSet.getDouble("coutUnitaire"),
                             resultSet.getDouble("tauxTVA"),
                             resultSet.getDouble("coutTransport"),
-                            resultSet.getDouble("coefficientQualte")
+                            resultSet.getDouble("coefficientQualte"),
+                            resultSet.getInt("projet_id")
                     );
                 } else {
                     continue; // Skip if type is not recognized
@@ -313,6 +319,97 @@ public class DevisRepositoryImpl implements DevisRepository {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Optional<Devis> findByProjet(int projet_id) throws SQLException {
+        String sql = "SELECT *, " +
+                "projets.id AS projetId , projets.nom AS projetNom, projets.* ," +
+                "composants.id AS composantId, composants.nom AS composantNom ," +
+                "clients.id AS clientId, clients.nom AS clientNom " +
+                "FROM devis " +
+                "LEFT JOIN projets ON devis.projet_id = projets.id " +
+                "LEFT JOIN composants ON projets.id = composants.projet_id " +
+                "LEFT JOIN clients ON projets.clientid = clients.id " +
+                "WHERE devis.projet_id = ? AND devis.deleted_at IS NULL";
+
+        try (Connection connection = DatabaseC.getInstance().getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, projet_id);
+            List<Composant> composants = new ArrayList<>();
+            Devis devis = null;
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (!resultSet.next()) {
+                    // If no results, return an empty Optional
+                    return Optional.empty();
+                }
+
+                // Retrieve client details
+                Client client = new Client(
+                        resultSet.getInt("clientId"),
+                        resultSet.getString("clientNom"),
+                        resultSet.getString("address"),
+                        resultSet.getString("phone"),
+                        resultSet.getBoolean("estProfessionnel"),
+                        resultSet.getDouble("remise")
+                );
+
+                // Create Projet and gather composants
+                Projet projet = new Projet(
+                        resultSet.getInt("projetId"),
+                        resultSet.getString("nom"),
+                        resultSet.getDouble("margebeneficiaire"),
+                        resultSet.getDouble("coutTotal"),
+                        StatusProjet.fromString(resultSet.getString("etatProjet")),
+                        composants,
+                        client
+                );
+
+                do {
+                    TypeComposant typeComposant = TypeComposant.fromString(resultSet.getString("type_composant"));
+                    if (TypeComposant.MAINDOEUVER.equals(typeComposant)) {
+                        Main_Doeuver mainDoeuver = new Main_Doeuver(
+                                resultSet.getInt("composantId"),
+                                resultSet.getString("composantNom"),
+                                typeComposant,
+                                resultSet.getDouble("quantite"),
+                                resultSet.getDouble("coutUnitaire"),
+                                resultSet.getDouble("tauxTVA"),
+                                resultSet.getDouble("productivite_ouvrier"),
+                                resultSet.getInt("projet_id")
+                        );
+                        composants.add(mainDoeuver);
+                    } else if (TypeComposant.MATERIAL.equals(typeComposant)) {
+                        Material material = new Material(
+                                resultSet.getInt("composantId"),
+                                resultSet.getString("composantNom"),
+                                typeComposant,
+                                resultSet.getDouble("quantite"),
+                                resultSet.getDouble("coutUnitaire"),
+                                resultSet.getDouble("tauxTVA"),
+                                resultSet.getDouble("coutTransport"),
+                                resultSet.getDouble("coefficientQualte"),
+                                resultSet.getInt("projet_id")
+                        );
+                        composants.add(material);
+                    }
+                } while (resultSet.next());
+
+                // Create and return the Devis object
+                devis = new Devis(
+                        resultSet.getInt("id"),
+                        resultSet.getDouble("montantEstime"),
+                        resultSet.getTimestamp("dateEstime").toLocalDateTime(),
+                        resultSet.getTimestamp("dateValidite").toLocalDateTime(),
+                        resultSet.getBoolean("accept"),
+                        projet
+                );
+            }
+
+            return Optional.ofNullable(devis);
         }
     }
 }

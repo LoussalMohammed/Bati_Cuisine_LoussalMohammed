@@ -9,6 +9,7 @@ import java.util.Optional;
 
 public interface DevisRepository {
     public Optional<Devis> findById(int id) throws SQLException;
+    public Optional<Devis> findByProjet(int projet_id) throws SQLException;
     public Optional<List<Devis>> getAll() throws SQLException;
 
     public boolean save(Devis devis) throws SQLException;

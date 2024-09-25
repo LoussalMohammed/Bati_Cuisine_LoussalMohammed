@@ -10,9 +10,10 @@ public class Material extends Composant{
     private double coutTransport;
 
     private double coefficientQualite;
+    private Integer projetId;
 
-    public Material(int id, String nom, TypeComposant typeComposant, double quantite, double coutUnitaire, double tauxTVA, double coutTransport, double coefficientQualite) {
-        super(id,nom, typeComposant, quantite, coutUnitaire, tauxTVA);
+    public Material(int id, String nom, TypeComposant typeComposant, double quantite, double coutUnitaire, double tauxTVA, double coutTransport, double coefficientQualite, Integer projetId) {
+        super(id,nom, typeComposant, quantite, coutUnitaire, tauxTVA, projetId);
         this.coutTransport = coutTransport;
         this.coefficientQualite = coefficientQualite;
     }

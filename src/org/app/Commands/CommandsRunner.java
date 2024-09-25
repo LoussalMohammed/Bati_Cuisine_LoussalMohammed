@@ -1,5 +1,6 @@
 package org.app.Commands;
 
+import org.database.Triggers.ComposantTrigger;
 import org.database.Triggers.DevisTrigger;
 import org.database.migrations.*;
 
@@ -23,6 +24,8 @@ public class CommandsRunner {
             case "create-devis" -> new DevisMigration().create();
             case "create-devis-function" -> new DevisTrigger().createFunction();
             case "create-devis-trigger" -> new DevisTrigger().createTrigger();
+            case "create-composant-function" -> new ComposantTrigger().createFunction();
+            case "create-composant-trigger" -> new ComposantTrigger().createTrigger();
 
             case "drop-project-status" -> new StatusProjetMigration().dropType();
             case "drop-type-composant" -> new TypeComposantMigration().dropType();

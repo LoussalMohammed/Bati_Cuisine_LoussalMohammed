@@ -170,7 +170,7 @@ public Material ajoutMaterial(int materialId) {
 
     System.out.println("Matériau ajouté avec succès !");
 
-    return new Material(materialId, materialNom, TypeComposant.MATERIEL, quantite, coutUnitaire, 0.00,coutTransport, coefficientQualite);
+    return new Material(materialId, materialNom, TypeComposant.MATERIAL, quantite, coutUnitaire, 0.00,coutTransport, coefficientQualite, null);
 }
 
 public List<Material> askCreationMaterial(int materialId) {
@@ -231,7 +231,7 @@ public Main_Doeuver ajoutMainDoeuver(int mainDouverId) {
     System.out.println("Main-d'œuvre ajoutée avec succès !");
 
     return new Main_Doeuver(
-        mainDouverId, mainDouverNom, TypeComposant.MAINDOEUVER, quantite, coutUnitaire, 0.00, produciviteOuvrier);
+        mainDouverId, mainDouverNom, TypeComposant.MAINDOEUVER, quantite, coutUnitaire, 0.00, produciviteOuvrier, null);
 }
 
     public List<Main_Doeuver> askCreationMainDouver(int mainDouverId) {
@@ -257,7 +257,7 @@ public Main_Doeuver ajoutMainDoeuver(int mainDouverId) {
         System.out.println("Surface :"+ surfaceCuisine);
         System.out.println("--- Détail des Coûts ---");
         List<Material> materials = projet.getComposants().stream()
-                .filter(composant -> composant.getTypeComposant().equals(TypeComposant.MATERIEL))
+                .filter(composant -> composant.getTypeComposant().equals(TypeComposant.MATERIAL))
                 .map(composant -> (Material) composant)
                 .toList();
 
@@ -325,7 +325,29 @@ public Main_Doeuver ajoutMainDoeuver(int mainDouverId) {
 
     public void afficherProjet(Projet projet) {
         System.out.println("Le nom du Projet:"+ projet.getNomProjet());
-
+        System.out.println("le nom du client:"+ projet.getClient().getNom().toLowerCase());
+        System.out.println("l'address du client:"+ projet.getClient().getAddress());
     }
 
+    public int calculProjetCout() {
+        int projet_id;
+        System.out.println("Entrer le id de projet:");
+        projet_id = scanner.nextInt();
+        if(scanner.hasNextLine()) {
+            scanner.nextLine();
+        }
+
+        return projet_id;
+    }
+
+
+    public void afficheDevis(Devis devis) {
+        System.out.println("le montant estime:"+ devis.getMonantEstime());
+        System.out.println("le date validite:"+ devis.getDateValidite());
+        System.out.println("le date estime:"+ devis.getDateEstime());
+    }
+
+    public void noDevisFound() {
+        System.out.println("No devis trouver pour projet specifie!");
+    }
 }

@@ -1,13 +1,7 @@
 package org.app.Services;
 
-import org.app.Models.Entities.Client;
-import org.app.Models.Entities.Main_Doeuver;
-import org.app.Models.Entities.Material;
-import org.app.Models.Entities.Projet;
-import org.app.Models.Repositories.RepositoriesImplementation.ClientRepositoryImpl;
-import org.app.Models.Repositories.RepositoriesImplementation.Main_doeuverRepositoryImpl;
-import org.app.Models.Repositories.RepositoriesImplementation.MaterialRepositoryImpl;
-import org.app.Models.Repositories.RepositoriesImplementation.ProjetRepositoryImpl;
+import org.app.Models.Entities.*;
+import org.app.Models.Repositories.RepositoriesImplementation.*;
 import org.views.projet.ProjetView;
 
 import java.sql.SQLException;
@@ -21,6 +15,7 @@ public class ProjetService {
 
     public static final MaterialRepositoryImpl materialModel = new MaterialRepositoryImpl();
     public static final Main_doeuverRepositoryImpl mainDoeuverModel = new Main_doeuverRepositoryImpl();
+    public static final DevisRepositoryImpl devisModel = new DevisRepositoryImpl();
     public ProjetView view;
 
     public ProjetService(ProjetRepositoryImpl model, ProjetView view) {
@@ -40,11 +35,35 @@ public class ProjetService {
                     Map<String, Object> projectComponents = creationProjet(client1);
                     Double surfaceCuisine = (Double) projectComponents.get("surfaceCuisine");
                     Projet projet = view.afficheProjet((Projet) projectComponents.get("projet"), surfaceCuisine);
+                    List<Material> materials = (List<Material>) projectComponents.get("material");
+                    List<Main_Doeuver> main_doeuvers = (List<Main_Doeuver>) projectComponents.get("main_douver");
                     model.save(projet);
+                    Optional<Projet> projetOptional = model.findById(model.getLastId());
+                    if(projetOptional.isPresent()) {
+                        Projet projet1 = projetOptional.get();
+                        materials.stream()
+                                .forEach(material -> {
+                                    try {
+                                        material.setProjetId(projet1.getId());
+                                        materialModel.save(material);
+                                    } catch (SQLException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                });
+                        main_doeuvers.stream()
+                                .forEach(main_doeuver -> {
+                                    try {
+                                        main_doeuver.setProjetId(projet1.getId());
+                                        mainDoeuverModel.save(main_doeuver);
+                                    } catch (SQLException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                });
+                    }
                 }
             }
         } else if(rcO == 2) {
-
+            addClient();
         }
     }
 
@@ -69,21 +88,13 @@ public class ProjetService {
         materials.stream()
                 .forEach(material -> {
                     material.setTauxTVA(coutTVA);
-                    try {
-                        materialModel.save(material);
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
-                    }
                 });
         main_doeuvers.stream()
                 .forEach(main_doeuver -> {
                     main_doeuver.setTauxTVA(coutTVA);
-                    try {
-                        mainDoeuverModel.save(main_doeuver);
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
-                    }
                 });
+        projectComponents.put("material", materials);
+        projectComponents.put("main_douver", main_doeuvers);
 
 
          return projectComponents;
@@ -92,5 +103,20 @@ public class ProjetService {
     public void afficherProjets() {
         Optional<List<Projet>> projets = model.getAll();
         view.afficherProjets(projets);
+    }
+
+    public void addClient() {
+        view.addClient();
+    }
+
+    public void calculProjetCout() throws SQLException {
+        int projetId = view.calculProjetCout();
+        Optional<Devis> devisOptional = devisModel.findByProjet(projetId);
+        if(devisOptional.isPresent()) {
+            Devis devis = devisOptional.get();
+            view.afficheDevis(devis);
+        } else {
+            view.noDevisFound();
+        }
     }
 }

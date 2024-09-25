@@ -25,7 +25,7 @@ public class ProjetRepositoryImpl implements ProjectRespository {
                 if (resultSet.next()) {
                     // Fetch project details
                     int projetId = resultSet.getInt("id");
-                    String projetNom = resultSet.getString("nomProjet");
+                    String projetNom = resultSet.getString("nom");
                     double margeBeneficiaire = resultSet.getDouble("margeBeneficiaire");
                     double coutTotal = resultSet.getDouble("coutTotal");
                     StatusProjet etatProjet = StatusProjet.fromString(resultSet.getString("etatprojet"));
@@ -75,12 +75,13 @@ public class ProjetRepositoryImpl implements ProjectRespository {
                                                 composantsResultSet.getDouble("quantite"),
                                                 composantsResultSet.getDouble("coutUnitaire"),
                                                 composantsResultSet.getDouble("tauxTVA"),
-                                                maindoeuverResultSet.getDouble("productivite_ouvrier")
+                                                maindoeuverResultSet.getDouble("productivite_ouvrier"),
+                                                resultSet.getInt("projet_id")
                                         );
                                         composants.add(mainDoeuver);
                                     }
                                 }
-                            } else if (TypeComposant.MATERIEL.equals(typeComposant)) {
+                            } else if (TypeComposant.MATERIAL.equals(typeComposant)) {
                                 // Fetch Material details
                                 String materialSql = "SELECT *," +
                                         " clients.nom AS clientNom, clients.address, clients.phone, clients.estprofessionnel, clients.remise " +
@@ -114,7 +115,8 @@ public class ProjetRepositoryImpl implements ProjectRespository {
                                                 composantsResultSet.getDouble("coutUnitaire"),
                                                 composantsResultSet.getDouble("tauxTVA"),
                                                 materialResultSet.getDouble("coutTransport"),
-                                                materialResultSet.getDouble("coefficientQualte")
+                                                materialResultSet.getDouble("coefficientQualte"),
+                                                resultSet.getInt("id")
                                         );
                                         composants.add(material);
                                     }
@@ -148,7 +150,11 @@ public class ProjetRepositoryImpl implements ProjectRespository {
 
     @Override
     public Optional<List<Projet>> getAll() {
-        String sql = "SELECT * FROM projets WHERE deleted_at IS NULL";
+        String sql = "SELECT *, clients.id AS clientId," +
+                "clients.nom as clientNom, clients.*" +
+                " FROM projets " +
+                "LEFT JOIN clients ON projets.clientid = clients.id" +
+                " WHERE projets.deleted_at IS NULL";
         List<Projet> projets = new ArrayList<>();
 
         try (Connection connection = DatabaseC.getInstance().getConnection();
@@ -161,6 +167,12 @@ public class ProjetRepositoryImpl implements ProjectRespository {
                 double margeBeneficiaire = resultSet.getDouble("margeBeneficiaire");
                 double coutTotal = resultSet.getDouble("coutTotal");
                 StatusProjet etatProjet = StatusProjet.fromString(resultSet.getString("etatProjet"));
+                int clientId = resultSet.getInt("clientId");
+                String clientNom = resultSet.getString("clientNom");
+                String address = resultSet.getString("address");
+                String phone = resultSet.getString("phone");
+                boolean estProfessionnel = resultSet.getBoolean("estprofessionnel");
+                double remise = resultSet.getDouble("remise");
 
                 // Fetch composants for each project
                 List<Composant> composants = new ArrayList<>();
@@ -186,12 +198,13 @@ public class ProjetRepositoryImpl implements ProjectRespository {
                                             composantsResultSet.getDouble("quantite"),
                                             composantsResultSet.getDouble("coutUnitaire"),
                                             composantsResultSet.getDouble("taux_TVA"),
-                                            maindoeuverResultSet.getDouble("productivite_ouvrier")
+                                            maindoeuverResultSet.getDouble("productivite_ouvrier"),
+                                            resultSet.getInt("id")
                                     );
                                     composants.add(mainDoeuver);
                                 }
                             }
-                        } else if (TypeComposant.MATERIEL.equals(typeComposant)) {
+                        } else if (TypeComposant.MATERIAL.equals(typeComposant)) {
                             String materialSql = "SELECT * FROM materials WHERE id = ?";
                             PreparedStatement materialStatement = connection.prepareStatement(materialSql);
                             materialStatement.setInt(1, composantId);
@@ -205,7 +218,8 @@ public class ProjetRepositoryImpl implements ProjectRespository {
                                             composantsResultSet.getDouble("coutUnitaire"),
                                             composantsResultSet.getDouble("taux_TVA"),
                                             materialResultSet.getDouble("cout_transport"),
-                                            materialResultSet.getDouble("coefficient_qualite")
+                                            materialResultSet.getDouble("coefficient_qualite"),
+                                            resultSet.getInt("id")
                                     );
                                     composants.add(material);
                                 }
@@ -222,7 +236,7 @@ public class ProjetRepositoryImpl implements ProjectRespository {
                         coutTotal,
                         etatProjet,
                         composants,
-                        null  // Assuming you will handle client separately if needed
+                        new Client(clientId, clientNom, address, phone, estProfessionnel, remise)
                 );
                 projets.add(projet);
             }
@@ -236,20 +250,19 @@ public class ProjetRepositoryImpl implements ProjectRespository {
 
     @Override
     public boolean save(Projet projet) throws SQLException {
-        String sql = "INSERT INTO projets (id, nom, margebeneficiaire, couttotal, etatprojet, clientid) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO projets (nom, margebeneficiaire, couttotal, etatprojet, clientid) VALUES (?, ?, ?, ?, ?)";
         boolean result = false;
 
         try (Connection connection = DatabaseC.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
-            statement.setInt(1, projet.getId());
-            statement.setString(2, projet.getNomProjet());
-            statement.setDouble(3, projet.getMargeBeneficiaire());
-            statement.setDouble(4, projet.getCoutTotal());
-            statement.setObject(5, projet.getEtatProjet());
-            statement.setObject(6, projet.getClient());
+            statement.setString(1, projet.getNomProjet());
+            statement.setDouble(2, projet.getMargeBeneficiaire());
+            statement.setDouble(3, projet.getCoutTotal());
+            statement.setObject(4, projet.getEtatProjet().name(), Types.OTHER);
+            statement.setObject(5, projet.getClient().getId());
             System.out.println("SQL: " + sql);
-            System.out.println("Parameters: " + projet.getId() + ", " + projet.getNomProjet() + ", " + projet.getMargeBeneficiaire() + ", " + projet.getCoutTotal() + ", " + projet.getEtatProjet() + ", " + projet.getClient());
+            System.out.println("Parameters: "+ projet.getNomProjet() + ", " + projet.getMargeBeneficiaire() + ", " + projet.getCoutTotal() + ", " + projet.getEtatProjet() + ", " + projet.getClient());
 
             statement.executeUpdate();
             result = true;
@@ -270,7 +283,7 @@ public class ProjetRepositoryImpl implements ProjectRespository {
             statement.setString(1, projet.getNomProjet());
             statement.setDouble(2, projet.getMargeBeneficiaire());
             statement.setDouble(3, projet.getCoutTotal());
-            statement.setObject(4, projet.getEtatProjet());
+            statement.setObject(4, projet.getEtatProjet().name(), Types.OTHER);
             statement.setObject(5, projet.getClient().getId());
             statement.setInt(6, projet.getId());
 

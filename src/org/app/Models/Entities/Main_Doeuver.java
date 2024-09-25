@@ -7,9 +7,10 @@ import java.util.List;
 public class Main_Doeuver extends Composant{
 
     private double productiviteOuvrier;
+    private Integer projetId;
 
-    public Main_Doeuver(int id, String nom, TypeComposant typeComposant, double quantite, double coutUnitaire, double tauxTVA, double productiviteOuvrier) {
-        super(id,nom, typeComposant, quantite, coutUnitaire, tauxTVA);
+    public Main_Doeuver(int id, String nom, TypeComposant typeComposant, double quantite, double coutUnitaire, double tauxTVA, double productiviteOuvrier, Integer projetId) {
+        super(id,nom, typeComposant, quantite, coutUnitaire, tauxTVA, projetId);
         this.productiviteOuvrier = productiviteOuvrier;
     }
 

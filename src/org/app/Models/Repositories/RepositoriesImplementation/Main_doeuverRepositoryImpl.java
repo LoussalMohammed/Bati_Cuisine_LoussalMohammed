@@ -29,7 +29,8 @@ public class Main_doeuverRepositoryImpl implements Main_doeuverRepository {
                             resultSet.getDouble("quantite"),
                             resultSet.getDouble("coutUnitaire"),
                             resultSet.getDouble("tauxTVA"),
-                            resultSet.getDouble("productivite_ouvrier")
+                            resultSet.getDouble("productivite_ouvrier"),
+                            resultSet.getInt("projet_id")
                     );
 
                     return Optional.ofNullable(main_doeuver);
@@ -55,7 +56,8 @@ public class Main_doeuverRepositoryImpl implements Main_doeuverRepository {
                             resultSet.getDouble("quantite"),
                             resultSet.getDouble("coutUnitaire"),
                             resultSet.getDouble("tauxTVA"),
-                            resultSet.getDouble("productivite_ouvrier")
+                            resultSet.getDouble("productivite_ouvrier"),
+                            resultSet.getInt("projet_id")
                     );
 
                     Main_doeuvers.add(main_doeuver);
@@ -76,7 +78,7 @@ public class Main_doeuverRepositoryImpl implements Main_doeuverRepository {
 
             statement.setInt(1, main_doeuver.getId());
             statement.setString(2, main_doeuver.getNom());
-            statement.setObject(3, main_doeuver.getTypeComposant());
+            statement.setObject(3, main_doeuver.getTypeComposant().name(), Types.OTHER);
             statement.setDouble(4, main_doeuver.getTauxTVA());
             statement.setDouble(5, main_doeuver.getQuantite());
             statement.setDouble(6, main_doeuver.getCoutUnitaire());
@@ -105,7 +107,7 @@ public class Main_doeuverRepositoryImpl implements Main_doeuverRepository {
 
 
             statement.setString(1, main_doeuver.getNom());
-            statement.setObject(2, main_doeuver.getTypeComposant());
+            statement.setObject(2, main_doeuver.getTypeComposant().name(), Types.OTHER);
             statement.setDouble(3, main_doeuver.getTauxTVA());
             statement.setDouble(4, main_doeuver.getQuantite());
             statement.setDouble(5, main_doeuver.getCoutUnitaire());

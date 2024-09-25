@@ -9,7 +9,7 @@ public class PrincipalMenuView {
         System.out.println("1. Créer un nouveau projet");
         System.out.println("2. Afficher les projets existants");
         System.out.println("3. Calculer le coût d'un projet");
-        System.out.println("4. Quitter");
+        System.out.println("0. Quitter");
         int option = scanner.nextInt();
         if(scanner.hasNextLine()) {
             scanner.nextLine();

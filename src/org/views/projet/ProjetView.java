@@ -262,4 +262,20 @@ public Main_Doeuver ajoutMainDoeuver(int mainDouverId) {
 
     }
 
+    public void afficherProjets(Optional<List<Projet>> projets) {
+    if(projets.isPresent() && projets != null) {
+        projets.get().stream()
+                .forEach(projet -> {
+                    afficherProjet(projet);
+                });
+    } else{
+        System.out.println("no projet exist!");
+    }
+
+    }
+
+    public void afficherProjet(Projet projet) {
+        System.out.println("Le nom du Projet:"+ projet.getNomProjet());
+    }
+
 }

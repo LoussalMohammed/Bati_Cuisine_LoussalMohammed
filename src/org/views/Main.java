@@ -14,13 +14,19 @@ public class Main {
     public final static ProjetService projetService = new ProjetService(model, view);
 
     public static void main(String[] args) throws SQLException {
-        int option = PrincipalMenuView.getOption();
+        boolean continueSelecter = true;
+        while(continueSelecter) {
+            int option = PrincipalMenuView.getOption();
 
-        switch(option) {
-            case 1:
-                projetService.createProjet();
-                break;
-            case 2:
+            switch (option) {
+                case 1 -> projetService.createProjet();
+                case 2 -> projetService.afficherProjets();
+                case 0 -> {
+                    continueSelecter = false;
+                    System.out.println("Exiter la process de selection.");
+                }
+                default -> System.out.println("option Invalid. s'il te plait selecter un nomber entre 0 est 3.");
+            }
         }
     }
 }

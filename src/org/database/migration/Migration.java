@@ -1,6 +1,6 @@
 package org.database.migration;
 
-import org.app.Tools.DatabaseC;
+import org.app.tools.DatabaseC;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

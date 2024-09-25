@@ -1,4 +1,4 @@
-package org.app.Tools;
+package org.app.tools;
 
 public class DataFile {
     public static void main(String[] args) {

@@ -4,9 +4,8 @@ import org.app.Models.Entities.*;
 import org.app.Models.Enums.StatusProjet;
 import org.app.Models.Enums.TypeComposant;
 import org.app.Models.Repositories.RepositoriesInterfaces.DevisRepository;
-import org.app.Tools.DatabaseC;
+import org.app.tools.DatabaseC;
 
-import java.lang.reflect.Type;
 import java.sql.*;
 import java.sql.Date;
 import java.time.LocalDateTime;

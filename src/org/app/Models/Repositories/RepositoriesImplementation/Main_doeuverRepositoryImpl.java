@@ -1,11 +1,9 @@
 package org.app.Models.Repositories.RepositoriesImplementation;
 
 import org.app.Models.Entities.Main_Doeuver;
-import org.app.Models.Entities.Material;
 import org.app.Models.Enums.TypeComposant;
 import org.app.Models.Repositories.RepositoriesInterfaces.Main_doeuverRepository;
-import org.app.Tools.DatabaseC;
-import org.views.Main;
+import org.app.tools.DatabaseC;
 
 import java.sql.*;
 import java.time.LocalDateTime;

@@ -7,6 +7,7 @@ import org.app.Models.Helpers.InputValidator;
 
 import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.stream.Collectors;
 
 public class ProjetView {
 
@@ -71,10 +72,13 @@ public Map<String, Object> creationProjet(int projetId, int materialId, int main
     List<Composant> composants = new ArrayList<>();
     composants.addAll(materials);
     composants.addAll(main_doeuvers);
-    Map<String, Double> total = calculTotal();
-    Projet projet = new Projet(projetId, projetNom, total.get("margeBeneficiaire"), 0.0, StatusProjet.ENCOURS, composants, client);
+    Map<String, Object> total = calculTotal();
+    Projet projet = new Projet(projetId, projetNom, (Double) total.get("margeBeneficiaire"), 0.0, StatusProjet.ENCOURS, composants, client);
+
 
     HashMap<String, Object> projectComponents = new HashMap<>();
+    projectComponents.put("surfaceCuisine", surfaceCuisine);
+    projectComponents.put("coutTVA", total.get("coutTVA"));
     projectComponents.put("projet", projet);
     projectComponents.put("material", materials);
     projectComponents.put("main_douver", main_doeuvers);
@@ -82,7 +86,7 @@ public Map<String, Object> creationProjet(int projetId, int materialId, int main
     return projectComponents;
 }
 
-public Map<String, Double> calculTotal() {
+public Map<String, Object> calculTotal() {
     String answer;
     double coutTVA = 0.00;
     double margeBenificiaire = 0.00;
@@ -120,7 +124,7 @@ public Map<String, Double> calculTotal() {
         } while(margeBenificiaire < 0);
     }
 
-    Map<String, Double> total = new HashMap<>();
+    Map<String, Object> total = new HashMap<>();
     total.put("coutTVA", coutTVA);
     total.put("margeBeneficiaire", margeBenificiaire);
 
@@ -245,12 +249,57 @@ public Main_Doeuver ajoutMainDoeuver(int mainDouverId) {
         return main_doeuvers;
     }
 
-    public void afficheProjet(Projet projet) {
+    public Projet afficheProjet(Projet projet, Double surfaceCuisine) {
         System.out.println("--- Résultat du Calcul ---");
         System.out.println("Nom du projet :"+ projet.getNomProjet());
         System.out.println("Client :"+ projet.getClient().getNom());
         System.out.println("Adresse du chantier :"+ projet.getClient().getAddress());
-        System.out.println("");
+        System.out.println("Surface :"+ surfaceCuisine);
+        System.out.println("--- Détail des Coûts ---");
+        List<Material> materials = projet.getComposants().stream()
+                .filter(composant -> composant.getTypeComposant().equals(TypeComposant.MATERIEL))
+                .map(composant -> (Material) composant)
+                .toList();
+
+        List<Main_Doeuver> main_doeuvers = projet.getComposants().stream()
+                .filter(composant -> composant.getTypeComposant().equals(TypeComposant.MAINDOEUVER))
+                .map(composant -> (Main_Doeuver) composant)
+                .toList();
+
+        double tvaRate = materials.get(0).getTauxTVA();
+
+        double materialsTotalCostBeforeTVA = materials.stream()
+                .mapToDouble(Material::calculeCout)
+                .sum();
+
+        System.out.println("1. Matériaux :");
+        materials.stream()
+                .forEach(material -> System.out.println("- " + material.getNom() + ":" + material.calculeCout() + "€(quantité:" + material.getQuantite() + "m², coût unitaire: " + material.getCoutUnitaire() + " €/m², qualité :" + material.getCoefficientQualite() + ", transport:" + material.getCoutTransport() + "€)"));
+        System.out.println("    **Coût total des matériaux avant TVA : " + materialsTotalCostBeforeTVA + " €**");
+        double materialsTotalCostWithTVA = materialsTotalCostBeforeTVA * (1 + tvaRate);
+
+        System.out.println("    **Coût total des matériaux avec TVA (" + (tvaRate * 100) + "%) : " + materialsTotalCostWithTVA + " €**");
+
+        double mainDoueversTotalCostBeforeTVA = main_doeuvers.stream()
+                .mapToDouble(Main_Doeuver::calculeCout)
+                .sum();
+
+        System.out.println("1. Main-d'œuvre :");
+        main_doeuvers.stream()
+                .forEach(main_doeuver -> System.out.println("- " + main_doeuver.getNom() + ":" + main_doeuver.calculeCout() + "€(taux horaire:" + main_doeuver.getCoutUnitaire() + "€/h, heures travaillées : " + main_doeuver.getQuantite() + " h, productivit :" + main_doeuver.getProductiviteOuvrier()));
+        System.out.println("    **Coût total des main-d'œuvre avant TVA : " + mainDoueversTotalCostBeforeTVA + " €**");
+        double mainDoueversTotalCostWithTVA = mainDoueversTotalCostBeforeTVA * (1 + tvaRate);
+
+        System.out.println("    **Coût total des main-d'œuvre avec TVA (" + (tvaRate * 100) + "%) : " + mainDoueversTotalCostWithTVA + " €**");
+        double totalAvantMarge = mainDoueversTotalCostWithTVA+materialsTotalCostWithTVA;
+        System.out.println("3. Coût total avant marge :"+ totalAvantMarge +"€");
+        double marge = totalAvantMarge * projet.getMargeBeneficiaire();
+        System.out.println("4. Marge bénéficiaire ("+projet.getMargeBeneficiaire()+"%): "+ marge+"€");
+        double projetCoutTotal = totalAvantMarge + marge;
+        System.out.println("**Coût total final du projet : "+projetCoutTotal+" €**");
+        projet.setCoutTotal(projetCoutTotal);
+
+        return projet;
     }
 
     public void addClient() {
@@ -276,6 +325,7 @@ public Main_Doeuver ajoutMainDoeuver(int mainDouverId) {
 
     public void afficherProjet(Projet projet) {
         System.out.println("Le nom du Projet:"+ projet.getNomProjet());
+
     }
 
 }

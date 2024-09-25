@@ -4,7 +4,7 @@ import org.app.Models.Entities.*;
 import org.app.Models.Enums.StatusProjet;
 import org.app.Models.Enums.TypeComposant;
 import org.app.Models.Repositories.RepositoriesInterfaces.ProjectRespository;
-import org.app.Tools.DatabaseC;
+import org.app.tools.DatabaseC;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -157,10 +157,10 @@ public class ProjetRepositoryImpl implements ProjectRespository {
 
             while (resultSet.next()) {
                 int projetId = resultSet.getInt("id");
-                String projetNom = resultSet.getString("nomProjet");
+                String projetNom = resultSet.getString("nom");
                 double margeBeneficiaire = resultSet.getDouble("margeBeneficiaire");
                 double coutTotal = resultSet.getDouble("coutTotal");
-                StatusProjet etatProjet = StatusProjet.fromString(resultSet.getString("StatusProjet"));
+                StatusProjet etatProjet = StatusProjet.fromString(resultSet.getString("etatProjet"));
 
                 // Fetch composants for each project
                 List<Composant> composants = new ArrayList<>();
@@ -185,7 +185,7 @@ public class ProjetRepositoryImpl implements ProjectRespository {
                                             typeComposant,
                                             composantsResultSet.getDouble("quantite"),
                                             composantsResultSet.getDouble("coutUnitaire"),
-                                            composantsResultSet.getDouble("tauxTVA"),
+                                            composantsResultSet.getDouble("taux_TVA"),
                                             maindoeuverResultSet.getDouble("productivite_ouvrier")
                                     );
                                     composants.add(mainDoeuver);
@@ -203,9 +203,9 @@ public class ProjetRepositoryImpl implements ProjectRespository {
                                             typeComposant,
                                             composantsResultSet.getDouble("quantite"),
                                             composantsResultSet.getDouble("coutUnitaire"),
-                                            composantsResultSet.getDouble("tauxTVA"),
-                                            materialResultSet.getDouble("coutTransport"),
-                                            materialResultSet.getDouble("coefficientQualte")
+                                            composantsResultSet.getDouble("taux_TVA"),
+                                            materialResultSet.getDouble("cout_transport"),
+                                            materialResultSet.getDouble("coefficient_qualite")
                                     );
                                     composants.add(material);
                                 }

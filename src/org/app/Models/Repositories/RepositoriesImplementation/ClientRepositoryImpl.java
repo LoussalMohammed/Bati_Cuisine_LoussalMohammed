@@ -1,13 +1,11 @@
 package org.app.Models.Repositories.RepositoriesImplementation;
 
 import org.app.Models.Entities.Client;
-import org.app.Tools.DatabaseC;
+import org.app.tools.DatabaseC;
 
-import javax.swing.text.html.Option;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 public class ClientRepositoryImpl {

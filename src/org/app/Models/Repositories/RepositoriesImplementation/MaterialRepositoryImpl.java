@@ -3,7 +3,7 @@ package org.app.Models.Repositories.RepositoriesImplementation;
 import org.app.Models.Entities.Material;
 import org.app.Models.Enums.TypeComposant;
 import org.app.Models.Repositories.RepositoriesInterfaces.MaterialRepository;
-import org.app.Tools.DatabaseC;
+import org.app.tools.DatabaseC;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -79,7 +79,7 @@ public class MaterialRepositoryImpl implements MaterialRepository {
 
             statement.setInt(1, material.getId());
             statement.setString(2, material.getNom());
-            statement.setObject(3, material.getTypeComposant());
+            statement.setObject(3, material.getTypeComposant().name(), java.sql.Types.OTHER);
             statement.setDouble(4, material.getTauxTVA());
             statement.setDouble(5, material.getQuantite());
             statement.setDouble(6, material.getCoutUnitaire());

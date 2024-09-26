@@ -5,7 +5,9 @@ import org.app.Models.Repositories.RepositoriesImplementation.*;
 import org.views.projet.ProjetView;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ProjetService {
 
@@ -45,6 +47,8 @@ public class ProjetService {
                                 .forEach(material -> {
                                     try {
                                         material.setProjetId(projet1.getId());
+                                        System.out.println(projet1.getNomProjet());
+                                        System.out.println(material.getProjetId());
                                         materialModel.save(material);
                                     } catch (SQLException e) {
                                         throw new RuntimeException(e);
@@ -54,16 +58,21 @@ public class ProjetService {
                                 .forEach(main_doeuver -> {
                                     try {
                                         main_doeuver.setProjetId(projet1.getId());
+                                        System.out.println(projet1.getNomProjet());
+                                        System.out.println(main_doeuver.getProjetId());
                                         mainDoeuverModel.save(main_doeuver);
                                     } catch (SQLException e) {
                                         throw new RuntimeException(e);
                                     }
                                 });
+                        obtenirValidationStetusDevis();
+
                     }
                 }
             }
         } else if(rcO == 2) {
-            addClient();
+            Client client = addClient();
+            clientAjouter(client);
         }
     }
 
@@ -105,18 +114,56 @@ public class ProjetService {
         view.afficherProjets(projets);
     }
 
-    public void addClient() {
-        view.addClient();
-    }
+    public Client addClient() {
+        int clientId = clientModel.getLastId()+1;
+        Map<String, Object> clientMap = view.addClient();
+
+        Client client = new Client(clientId, (String) clientMap.get("nom"), (String) clientMap.get("address"),
+                (String) clientMap.get("phone"),
+                (boolean) clientMap.get("estProfessionnel"),
+                (double) clientMap.get("remise"));
+        try {
+            clientModel.save(client);
+            return clientModel.findById(clientId);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+     }
 
     public void calculProjetCout() throws SQLException {
-        int projetId = view.calculProjetCout();
-        Optional<Devis> devisOptional = devisModel.findByProjet(projetId);
-        if(devisOptional.isPresent()) {
-            Devis devis = devisOptional.get();
-            view.afficheDevis(devis);
+        Optional<List<Devis>> devisOptional = devisModel.getAll();
+
+        if(devisOptional.isPresent() && !devisOptional.get().isEmpty()) {
+            List<Devis> devis = devisOptional.get();
+
+            AtomicInteger count = new AtomicInteger(1);
+            devis.stream()
+                    .forEach(devisE -> {
+                        System.out.println("devis " + count + ":");
+                        view.afficheDevis(devisE);  // Check if this method works properly
+                        count.getAndIncrement();
+                    });
         } else {
             view.noDevisFound();
         }
+    }
+
+
+    public void clientAjouter(Client client) {
+        view.clientAjouter(client);
+    }
+
+    public void obtenirValidationStetusDevis() throws SQLException {
+        Map<String, Object> devisStatus = view.devisStatus();
+        Optional<Devis> dernierDevisOptional = devisModel.findById(devisModel.findLastId());
+        if(dernierDevisOptional.isPresent()) {
+            Devis dernierDevis = dernierDevisOptional.get();
+            dernierDevis.setAcceptStatus((boolean) devisStatus.get("accept"));
+            dernierDevis.setDateValidite((LocalDateTime) devisStatus.get("dateValidite"));
+            devisModel.update(dernierDevis);
+        } else {
+            view.noDevisFound();
+        }
+
     }
 }

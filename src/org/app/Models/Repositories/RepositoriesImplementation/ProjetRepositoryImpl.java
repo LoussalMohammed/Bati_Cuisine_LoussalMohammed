@@ -74,7 +74,7 @@ public class ProjetRepositoryImpl implements ProjectRespository {
                                                 typeComposant,
                                                 composantsResultSet.getDouble("quantite"),
                                                 composantsResultSet.getDouble("coutUnitaire"),
-                                                composantsResultSet.getDouble("tauxTVA"),
+                                                composantsResultSet.getDouble("taux_TVA"),
                                                 maindoeuverResultSet.getDouble("productivite_ouvrier"),
                                                 resultSet.getInt("projet_id")
                                         );
@@ -113,10 +113,10 @@ public class ProjetRepositoryImpl implements ProjectRespository {
                                                 typeComposant,
                                                 composantsResultSet.getDouble("quantite"),
                                                 composantsResultSet.getDouble("coutUnitaire"),
-                                                composantsResultSet.getDouble("tauxTVA"),
-                                                materialResultSet.getDouble("coutTransport"),
-                                                materialResultSet.getDouble("coefficientQualte"),
-                                                resultSet.getInt("id")
+                                                composantsResultSet.getDouble("taux_TVA"),
+                                                materialResultSet.getDouble("cout_Transport"),
+                                                materialResultSet.getDouble("coefficient_Qualite"),
+                                                materialResultSet.getInt("projet_id")
                                         );
                                         composants.add(material);
                                     }

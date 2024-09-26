@@ -73,7 +73,7 @@ public class MaterialRepositoryImpl implements MaterialRepository {
 
     @Override
     public boolean save(Material material) throws SQLException {
-        String sql = "INSERT INTO materials (id, nom, type_composant, taux_tva, quantite, coutunitaire, cout_transport, coefficient_qualite) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO materials (id, nom, type_composant, taux_tva, quantite, coutunitaire, cout_transport, coefficient_qualite, projet_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         boolean result = false;
 
         try (Connection connection = DatabaseC.getInstance().getConnection();
@@ -87,6 +87,7 @@ public class MaterialRepositoryImpl implements MaterialRepository {
             statement.setDouble(6, material.getCoutUnitaire());
             statement.setDouble(7, material.getCoutTransport());
             statement.setDouble(8, material.getCoefficientQualite());
+            statement.setInt(9, material.getProjetId());
 
             System.out.println("SQL: " + sql);
             System.out.println("Parameters: " + material.getId() + ", " + material.getNom() + ", " + material.getTypeComposant() + ", " + material.getTauxTVA() + ", " + material.getQuantite() + ", " + material.getCoutUnitaire() + ", " + material.getCoutTransport() + ", " + material.getCoefficientQualite());
@@ -103,7 +104,7 @@ public class MaterialRepositoryImpl implements MaterialRepository {
     @Override
     public boolean update(Material material) throws SQLException {
 
-        String sql = "UPDATE materials SET nom = ?, type_composant = ?, taux_tva = ?, quantite = ?, coutunitaire = ?, cout_transport = ?, coefficient_qualite = ? WHERE id = ?";
+        String sql = "UPDATE materials SET nom = ?, type_composant = ?, taux_tva = ?, quantite = ?, coutunitaire = ?, cout_transport = ?, coefficient_qualite = ?, projet_id = ? WHERE id = ?";
         boolean result = false;
 
         try (Connection connection = DatabaseC.getInstance().getConnection();
@@ -117,8 +118,9 @@ public class MaterialRepositoryImpl implements MaterialRepository {
             statement.setDouble(5, material.getCoutUnitaire());
             statement.setDouble(6, material.getCoutTransport());
             statement.setDouble(7, material.getCoefficientQualite());
+            statement.setInt(8, material.getProjetId());
 
-            statement.setInt(8, material.getId());
+            statement.setInt(9, material.getId());
             statement.executeUpdate();
             result = true;
 

@@ -76,7 +76,7 @@ public abstract class Composant {
         this.tauxTVA = tauxTVA;
     }
 
-    public Integer setProjetId() {
+    public Integer getProjetId() {
         return projetId;
     }
 

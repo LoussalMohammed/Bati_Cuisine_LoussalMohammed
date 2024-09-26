@@ -70,7 +70,7 @@ public class Main_doeuverRepositoryImpl implements Main_doeuverRepository {
 
     @Override
     public boolean save(Main_Doeuver main_doeuver) throws SQLException {
-        String sql = "INSERT INTO main_doeuvres (id, nom, type_composant, taux_tva, quantite, coutunitaire, productivite_ouvrier) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO main_doeuvres (id, nom, type_composant, taux_tva, quantite, coutunitaire, productivite_ouvrier, projet_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         boolean result = false;
 
         try (Connection connection = DatabaseC.getInstance().getConnection();
@@ -83,6 +83,7 @@ public class Main_doeuverRepositoryImpl implements Main_doeuverRepository {
             statement.setDouble(5, main_doeuver.getQuantite());
             statement.setDouble(6, main_doeuver.getCoutUnitaire());
             statement.setDouble(7, main_doeuver.getProductiviteOuvrier());
+            statement.setInt(8, main_doeuver.getProjetId());
 
             System.out.println("SQL: " + sql);
             System.out.println("Parameters: " + main_doeuver.getId() + ", " + main_doeuver.getNom() + ", " + main_doeuver.getTypeComposant() + ", " + main_doeuver.getTauxTVA() + ", " + main_doeuver.getQuantite() + ", " + main_doeuver.getCoutUnitaire() + ", " + main_doeuver.getProductiviteOuvrier());
@@ -99,7 +100,7 @@ public class Main_doeuverRepositoryImpl implements Main_doeuverRepository {
     @Override
     public boolean update(Main_Doeuver main_doeuver) throws SQLException {
 
-        String sql = "UPDATE main_doeuvres SET nom = ?, type_composant = ?, taux_tva = ?, quantite = ?, coutunitaire = ?, productivite_ouvrier = ? WHERE id = ?";
+        String sql = "UPDATE main_doeuvres SET nom = ?, type_composant = ?, taux_tva = ?, quantite = ?, coutunitaire = ?, productivite_ouvrier = ?, projet_id = ? WHERE id = ?";
         boolean result = false;
 
         try (Connection connection = DatabaseC.getInstance().getConnection();
@@ -112,6 +113,7 @@ public class Main_doeuverRepositoryImpl implements Main_doeuverRepository {
             statement.setDouble(4, main_doeuver.getQuantite());
             statement.setDouble(5, main_doeuver.getCoutUnitaire());
             statement.setDouble(6, main_doeuver.getProductiviteOuvrier());
+            statement.setInt(7, main_doeuver.getProjetId());
 
             statement.setInt(8, main_doeuver.getId());
             statement.executeUpdate();

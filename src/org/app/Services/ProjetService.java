@@ -43,11 +43,14 @@ public class ProjetService {
                     Optional<Projet> projetOptional = model.findById(model.getLastId());
                     if(projetOptional.isPresent()) {
                         Projet projet1 = projetOptional.get();
+                        AtomicInteger count = new AtomicInteger(1);
                         materials.stream()
                                 .forEach(material -> {
                                     try {
+                                        System.out.println("the material number:"+ count);
                                         material.setProjetId(projet1.getId());
                                         materialModel.save(material);
+                                        count.getAndIncrement();
                                     } catch (SQLException e) {
                                         throw new RuntimeException(e);
                                     }

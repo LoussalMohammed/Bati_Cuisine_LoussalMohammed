@@ -11,3 +11,5 @@ CREATE TABLE users
     password VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+INSERT INTO users(firstName, lastName, email, phone, password) VALUES ('Mohammed', 'Loussal', 'loussalmohammed@gmail.com', '0619827480', '$2a$10$jX92CYgZqJXANRceLpjtuetGrIYzeAouJZBaPhqxlciyUgo5XHhe6');

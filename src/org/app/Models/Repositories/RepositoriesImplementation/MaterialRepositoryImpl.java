@@ -75,6 +75,7 @@ public class MaterialRepositoryImpl implements MaterialRepository {
     public boolean save(Material material) throws SQLException {
         String sql = "INSERT INTO materials (id, nom, type_composant, taux_tva, quantite, coutunitaire, cout_transport, coefficient_qualite, projet_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         boolean result = false;
+        System.out.println("===Here Started adding Material====");
 
         try (Connection connection = DatabaseC.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {

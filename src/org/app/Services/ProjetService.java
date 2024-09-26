@@ -47,8 +47,6 @@ public class ProjetService {
                                 .forEach(material -> {
                                     try {
                                         material.setProjetId(projet1.getId());
-                                        System.out.println(projet1.getNomProjet());
-                                        System.out.println(material.getProjetId());
                                         materialModel.save(material);
                                     } catch (SQLException e) {
                                         throw new RuntimeException(e);
@@ -58,8 +56,6 @@ public class ProjetService {
                                 .forEach(main_doeuver -> {
                                     try {
                                         main_doeuver.setProjetId(projet1.getId());
-                                        System.out.println(projet1.getNomProjet());
-                                        System.out.println(main_doeuver.getProjetId());
                                         mainDoeuverModel.save(main_doeuver);
                                     } catch (SQLException e) {
                                         throw new RuntimeException(e);

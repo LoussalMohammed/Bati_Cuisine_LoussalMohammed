@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Main-Class: org.views.Main
+Class-Path: jbcrypt-0.4.jar kotlin-stdlib-jdk8-1.8.21.jar kotlin-stdlib-
+ 1.8.21.jar kotlin-stdlib-common-1.8.21.jar annotations-13.0.jar kotlin-
+ stdlib-jdk7-1.8.21.jar postgresql-42.7.4.jar
+
